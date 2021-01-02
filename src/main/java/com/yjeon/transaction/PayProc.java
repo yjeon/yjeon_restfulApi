@@ -1,0 +1,152 @@
+package com.yjeon.transaction;
+
+import java.io.UnsupportedEncodingException;
+
+import org.json.simple.JSONObject;
+
+import com.yjeon.util.AES128Util;
+import com.yjeon.util.CommonUtil;
+
+public class PayProc {
+	
+	/*
+	 * Approve Process
+	 */
+	public JSONObject approveProc(JSONObject jobj) throws Exception {
+		JSONObject rtnData = new JSONObject();
+		
+		String ccno = (String)jobj.get("ccno");
+		String exp = (String)jobj.get("exp");
+		String cvc = (String)jobj.get("cvc");
+		String amount = (String)jobj.get("amount");
+		String tax = (String)jobj.get("tax");
+		String installment = (String)jobj.get("installment");
+		String data = ccno+"|"+exp+"|"+cvc;
+		AES128Util aes = new AES128Util();
+		String encData="";
+		try {
+			encData = aes.encrypt(data);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String tranId = CommonUtil.createTransactionID();
+		String header = "";
+		header+=CommonUtil.strPadding("PAYMENT", 10, "L");
+		header+=CommonUtil.strPadding(tranId, 20, "L");
+		String sData = "";
+		sData+=CommonUtil.strPadding(ccno, 20, "L");			//카드번호
+		sData+=CommonUtil.strPadding(installment, 2, "0");		//할부개월수
+		sData+=CommonUtil.strPadding(exp, 4, "L");				//유효기간
+		sData+=CommonUtil.strPadding(cvc, 3, "L");				//cvc
+		sData+=CommonUtil.strPadding(amount, 10, null);			//결제금액
+		sData+=CommonUtil.strPadding(tax, 10, "0");				//부가세
+		sData+=CommonUtil.strPadding("", 20, "L");				//원거래번호(취소시만)
+		sData+=CommonUtil.strPadding(encData, 300, "L");		//암호화된카드정보
+		sData+=CommonUtil.strPadding("", 47, "L");			//예비필드
+		
+		
+		
+		int sleng = (header+sData).length();
+		String totalData = CommonUtil.strPadding(String.valueOf(sleng), 4, null)+header+sData;
+		
+		rtnData.put("transactionId", tranId);
+		rtnData.put("stringData", totalData);
+		System.out.println(totalData);
+		System.out.println(aes.decrypt(encData));
+		return rtnData;
+	}
+	
+	
+	/*
+	 * String null or empty check
+	 * ccno, exp, cvc, installment, amount 
+	 */
+	public JSONObject valCheck(TransactionVO tranVO, JSONObject jobj) {
+		
+		boolean flag = true;
+		jobj = tranVO.toJSONValues();
+		jobj.put("ReplyCode", "0000");
+		jobj.put("ReplyMessage", "OK");
+		
+		try {
+			
+			//null or empty check start
+			if(flag && !CommonUtil.strNullCheck((String)jobj.get("ccno"))) {
+				jobj.put("ReplyCode", "9901");
+				jobj.put("ReplyMessage", "ccno input check");
+				flag = false;
+			}
+			if(flag && !CommonUtil.strNullCheck((String)jobj.get("exp"))) {
+				jobj.put("ReplyCode", "9902");
+				jobj.put("ReplyMessage", "exp input check");
+				flag = false;			
+			}
+			if(flag && !CommonUtil.strNullCheck((String)jobj.get("cvc"))) {
+				jobj.put("ReplyCode", "9903");
+				jobj.put("ReplyMessage", "cvc input check");
+				flag = false;
+			}
+			if(flag && !CommonUtil.strNullCheck((String)jobj.get("installment"))) {
+				jobj.put("ReplyCode", "9904");
+				jobj.put("ReplyMessage", "installment input check");
+				flag = false;
+			}
+			if(flag && !CommonUtil.strNullCheck((String)jobj.get("amount"))) {
+				jobj.put("ReplyCode", "9905");
+				jobj.put("ReplyMessage", "amount input check");
+				flag = false;
+			}
+			//null or empty check end
+			
+			if(flag) {
+				//data length or value check start
+				int ccnoLeng = jobj.get("ccno").toString().length();
+				if(flag && (ccnoLeng <10 && ccnoLeng>16)) {
+					jobj.put("ReplyCode", "9906");
+					jobj.put("ReplyMessage", "ccno length check (10~16len)");
+					flag = false;
+				}
+				int expLeng = jobj.get("exp").toString().length();
+				if(flag && (expLeng!=4)) {
+					jobj.put("ReplyCode", "9907");
+					jobj.put("ReplyMessage", "exp length check (size 4)");
+					flag = false;			
+				}
+				int cvcLeng = jobj.get("cvc").toString().length();
+				if(flag && (cvcLeng!=3)) {
+					jobj.put("ReplyCode", "9908");
+					jobj.put("ReplyMessage", "cvc length check (size 3)");
+					flag = false;
+				}
+				int install = Integer.parseInt(jobj.get("installment").toString());
+				if(flag && (install >12 && install<0)) {
+					jobj.put("ReplyCode", "9909");
+					jobj.put("ReplyMessage", "installment value check (under 12 && over 0)");
+					flag = false;
+				}
+				int amount = Integer.parseInt((String)jobj.get("amount")); 
+				if(flag && (amount<100 && amount>1000000000)) {
+					jobj.put("ReplyCode", "9910");
+					jobj.put("ReplyMessage", "amount value check (under 1000000000 && over 100)");
+					flag = false;
+				}
+				String taxStr = (String)jobj.get("tax");
+				if(flag && (taxStr!=null && taxStr.trim().length() != 0)) {
+					int tax = Integer.parseInt(taxStr);
+					if(tax>amount) {
+						jobj.put("ReplyCode", "9911");
+						jobj.put("ReplyMessage", "Tax cannot be bigger than amount");
+						flag = false;
+					}
+				}
+				//data length or value check end
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			jobj.put("ReplyCode", "9999");
+			jobj.put("ReplyMessage", "Data Error - valCheck()");
+		}
+		
+		return jobj;
+	}
+}

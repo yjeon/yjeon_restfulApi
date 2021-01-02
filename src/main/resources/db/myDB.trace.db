@@ -1,0 +1,12 @@
+2021-01-02 21:49:16 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT[*]"; expected "INTO"; SQL statement:
+INSERT [42001-200]
+2021-01-02 21:50:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO TRANSACTION VALUE[*] ( 'id1234', 1000, 99 , NULL, 'N', 'String1234')"; expected "., (, DIRECT, SORTED, DEFAULT, VALUES, SET, (, WITH, SELECT, TABLE, VALUES"; SQL statement:
+INSERT into transaction value ( 'id1234', 1000, 99 , null, 'N', 'String1234') [42001-200]
+2021-01-02 21:51:45 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT ITRANSACTION[*] NTO TRANSACTION VALUES ( 'id1234', '1000', '99' , NULL, 'N', 'String1234')"; expected "INTO"; SQL statement:
+INSERT iTRANSACTION nto transaction values ( 'id1234', '1000', '99' , null, 'N', 'String1234') [42001-200]
+2021-01-02 21:51:59 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT TRANSACTION[*] INTO TRANSACTION VALUES ( 'id1234', '1000', '99' , NULL, 'N', 'String1234')"; expected "INTO"; SQL statement:
+INSERT TRANSACTION into transaction values ( 'id1234', '1000', '99' , null, 'N', 'String1234') [42001-200]

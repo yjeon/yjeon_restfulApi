@@ -1,11 +1,15 @@
 package com.yjeon.transaction;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import org.json.simple.JSONObject;
 
 import com.yjeon.util.AES128Util;
 import com.yjeon.util.CommonUtil;
+import com.yjeon.util.ConnectionDB;
 
 public class PayProc {
 	
@@ -51,8 +55,26 @@ public class PayProc {
 		
 		rtnData.put("transactionId", tranId);
 		rtnData.put("stringData", totalData);
+		
+		
 		System.out.println(totalData);
 		System.out.println(aes.decrypt(encData));
+		String test = "";
+		ConnectionDB db = new ConnectionDB();
+		try {
+			Connection con = db.getConnection();
+			String sql = "Select id from transaction";
+			PreparedStatement ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				test = rs.getString(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println(test);
+ 		
 		return rtnData;
 	}
 	

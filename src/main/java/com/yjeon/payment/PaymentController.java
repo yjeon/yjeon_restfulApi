@@ -16,7 +16,7 @@ import com.yjeon.transaction.TransactionVO;
 @RestController
 public class PaymentController {
 	
-	@RequestMapping(value = "payment/reqApprove.do", method = RequestMethod.POST)
+	@RequestMapping(value = "payment/reqApprove", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
 	public JSONObject reqApprove(@RequestBody TransactionVO tranVO) {
 		//init

@@ -19,6 +19,23 @@ public class PayProc {
 	public JSONObject approveProc(JSONObject jobj) throws Exception {
 		JSONObject rtnData = new JSONObject();
 		
+		String tranId = CommonUtil.createTransactionID();
+		String payData = setPayProc(jobj, tranId);
+		
+		rtnData.put("transactionId", tranId);
+		rtnData.put("stringData", payData);
+		
+		//System.out.println(payData);
+		
+		return rtnData;
+	}
+	
+	/*
+	 * Create String data and Inserting data
+	 */
+	public String setPayProc(JSONObject jobj, String tranId) throws Exception {
+		String rtnData = "";
+		
 		String ccno = (String)jobj.get("ccno");
 		String exp = (String)jobj.get("exp");
 		String cvc = (String)jobj.get("cvc");
@@ -33,7 +50,7 @@ public class PayProc {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String tranId = CommonUtil.createTransactionID();
+		
 		String header = "";
 		header+=CommonUtil.strPadding("PAYMENT", 10, "L");
 		header+=CommonUtil.strPadding(tranId, 20, "L");
@@ -48,36 +65,34 @@ public class PayProc {
 		sData+=CommonUtil.strPadding(encData, 300, "L");		//암호화된카드정보
 		sData+=CommonUtil.strPadding("", 47, "L");			//예비필드
 		
-		
-		
 		int sleng = (header+sData).length();
-		String totalData = CommonUtil.strPadding(String.valueOf(sleng), 4, null)+header+sData;
+		rtnData = CommonUtil.strPadding(String.valueOf(sleng), 4, null)+header+sData;
+		//System.out.println(aes.decrypt(encData));
 		
-		rtnData.put("transactionId", tranId);
-		rtnData.put("stringData", totalData);
-		
-		
-		System.out.println(totalData);
-		System.out.println(aes.decrypt(encData));
-		String test = "";
 		ConnectionDB db = new ConnectionDB();
+		Connection con = null;
+		PreparedStatement ps = null;
 		try {
-			Connection con = db.getConnection();
-			String sql = "Select id from transaction";
-			PreparedStatement ps = con.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
-				test = rs.getString(1);
-			}
+			con = db.getConnection();
+			String sql = "INSERT INTO TRANSACTION VALUES (?,'1',?,?,?,'','N',?,?)";
+			ps = con.prepareStatement(sql);
+			ps.setString(1, tranId);
+			ps.setString(2, amount);
+			ps.setString(3, tax);
+			ps.setString(4, installment);
+			ps.setString(5, encData);
+			ps.setString(6, rtnData);
+			ps.executeUpdate();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			ps.close();
+			con.close();
 		}
 		
-		System.out.println(test);
- 		
 		return rtnData;
 	}
-	
 	
 	/*
 	 * String null or empty check
@@ -140,14 +155,20 @@ public class PayProc {
 					jobj.put("ReplyMessage", "cvc length check (size 3)");
 					flag = false;
 				}
-				int install = Integer.parseInt(jobj.get("installment").toString());
-				if(flag && (install >12 && install<0)) {
+				String installment = jobj.get("installment").toString();
+				if(flag && installment.length()>2) {
 					jobj.put("ReplyCode", "9909");
-					jobj.put("ReplyMessage", "installment value check (under 12 && over 0)");
+					jobj.put("ReplyMessage", "installment value check (under 12 && over 00)");
+					flag = false;
+				}
+				int install = Integer.parseInt(jobj.get("installment").toString());
+				if(flag && (install >12 || install<0)) {
+					jobj.put("ReplyCode", "9909");
+					jobj.put("ReplyMessage", "installment value check (under 12 && over 00)");
 					flag = false;
 				}
 				int amount = Integer.parseInt((String)jobj.get("amount")); 
-				if(flag && (amount<100 && amount>1000000000)) {
+				if(flag && (amount<100 || amount>1000000000)) {
 					jobj.put("ReplyCode", "9910");
 					jobj.put("ReplyMessage", "amount value check (under 1000000000 && over 100)");
 					flag = false;
@@ -166,7 +187,7 @@ public class PayProc {
 		} catch (Exception e) {
 			e.printStackTrace();
 			jobj.put("ReplyCode", "9999");
-			jobj.put("ReplyMessage", "Data Error - valCheck()");
+			jobj.put("ReplyMessage", "Data Error - PayProc - valCheck()");
 		}
 		
 		return jobj;

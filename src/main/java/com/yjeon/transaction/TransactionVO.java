@@ -10,6 +10,9 @@ public class TransactionVO {
 	private String amount;
 	private String tax;
 	private String installment;
+	
+	private String transactionId;
+	
 	public String getCcno() {
 		return ccno;
 	}
@@ -47,6 +50,12 @@ public class TransactionVO {
 		this.installment = installment;
 	}
 	
+	public String getTransactionId() {
+		return transactionId;
+	}
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
 	public JSONObject toJSONValues() {
 		JSONObject jobj = new JSONObject();
 		
@@ -56,14 +65,14 @@ public class TransactionVO {
 		jobj.put("amount", this.amount);
 		jobj.put("tax", this.tax);
 		jobj.put("installment", this.installment);
-		
+		jobj.put("transactionId", this.transactionId);
 		return jobj;
 	}
 	
 	@Override
 	public String toString() {
 		return "TransactionVO [ccno=" + ccno + ", exp=" + exp + ", cvc=" + cvc + ", amount=" + amount + ", tax=" + tax
-				+ ", installment=" + installment + "]";
+				+ ", installment=" + installment + ", transactionId=" + transactionId + "]";
 	}
 	
 }

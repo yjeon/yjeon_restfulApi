@@ -16,7 +16,7 @@ public class AES128Util {
 	private String aes128key;
 	
 	public AES128Util() throws UnsupportedEncodingException{
-		
+		//init
 		this.aes128key = "0987654321012345";
 		this.iv = aes128key.substring(0, 16);
 		byte[] keyBytes = new byte[16];

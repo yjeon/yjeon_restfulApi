@@ -13,7 +13,7 @@ import com.yjeon.util.ConnectionDB;
 
 public class InqueryProc {
 	/*
-	 * String null or empty check
+	 * String null or empty check 
 	 * transactionId
 	 */
 	public JSONObject valCheck(TransactionVO tranVO, JSONObject jobj) {

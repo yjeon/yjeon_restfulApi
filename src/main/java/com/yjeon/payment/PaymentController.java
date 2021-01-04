@@ -63,7 +63,7 @@ public class PaymentController {
 		jobj = cp.valCheck(tranVO, jobj);
 		
 		if("0000".equals(jobj.get("ReplyCode"))) {
-			//Data exists check
+			//Data exists check 
 			try {
 				originTran = cp.dataCheck((String)jobj.get("transactionId"));
 			} catch (Exception e) {

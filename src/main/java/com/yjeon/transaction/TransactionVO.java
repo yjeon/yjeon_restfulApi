@@ -71,7 +71,7 @@ public class TransactionVO {
 	
 	@Override
 	public String toString() {
-		return "TransactionVO [ccno=" + ccno + ", exp=" + exp + ", cvc=" + cvc + ", amount=" + amount + ", tax=" + tax
+		return "TransactionVO [ccno =" + ccno + ", exp=" + exp + ", cvc=" + cvc + ", amount=" + amount + ", tax=" + tax
 				+ ", installment=" + installment + ", transactionId=" + transactionId + "]";
 	}
 	

@@ -67,7 +67,7 @@ public class PayProc {
 		
 		int sleng = (header+sData).length();
 		rtnData = CommonUtil.strPadding(String.valueOf(sleng), 4, null)+header+sData;
-		//System.out.println(aes.decrypt(encData));
+		//System.out.println(aes.decrypt(encData ));
 		
 		ConnectionDB db = new ConnectionDB();
 		Connection con = null;

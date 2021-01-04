@@ -11,6 +11,7 @@ public class ConnectionDB {
 			Connection con = DriverManager.getConnection("jdbc:h2:./src/main/resources/db/myDB","sa","");
 			
 			PreparedStatement ps = null;
+			//create table 
 			String sql = "CREATE TABLE IF NOT EXISTS TRANSACTION ( \n" + 
 					"	ID VARCHAR(20) NOT NULL PRIMARY KEY, \n" + 
 					"	TRANFLAG CHAR(1) NOT NULL, \n" + 

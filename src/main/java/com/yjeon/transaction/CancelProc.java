@@ -27,7 +27,7 @@ public class CancelProc {
 		jobj.put("ReplyMessage", "OK");
 		
 		try {
-			//null or empty check start
+			//null or empty check start 
 			if(flag && !CommonUtil.strNullCheck((String)jobj.get("transactionId"))) {
 				jobj.put("ReplyCode", "9912");
 				jobj.put("ReplyMessage", "transactionId input check");

@@ -129,7 +129,7 @@ Response 예시
 
 
 ## 응답코드
-|ErrorCode|ErrorMessage|
+|ReplyCode|ReplyMessage|
 |--|--|
 |0000|OK                                                                           |
 |9901|Ccno input check                                                             |

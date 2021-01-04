@@ -25,12 +25,20 @@ Table : Transaction
 
 ## 문제해결 및 전략
 Request를 VO에 담고, Validation 체크 후 승인프로세스로 넘어가 데이터베이스에 넣습니다.
+승인 프로세스를 개발 후 조회 프로세스 개발 하여 시간 절약을 했습니다.
+취소 프로세스의 경우, 승인, 조회와 같은 방식으나, 부분취소와 전체취소의 개념을 DB에 구분자로 구분하여, 같은 프로세스를 사용하여 공통소스로 개발하였습니다.
 
 
 ## 빌드 및 실행 방법
-빌드 방법
+- 빌드 방법
 Project를 import하신 후 maven에서 Update Project합니다.
-maven build 통해 war 생성합니다.
+Manven install을 통해 Maven Depenedncies의 파일들을 받고 maven build 통해 war 생성합니다.
+
+- 실행 방법
+1. Project를 eclipse에서 실행 시킨다. (Spring Boot App)
+2. 생성 된 war를 실행 시킵니다.
+  예시) java -jar payment-0.0.1-SNAPSHOT.war
+
 
 
 

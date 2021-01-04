@@ -6,7 +6,7 @@
 Java, Spring Framework Boot, Maven, H2 Database(embedded)
 ```
 
-## 테이블 설계
+## 테이블 정보
 ```bash
 Table : Transaction
 ```
@@ -24,10 +24,17 @@ Table : Transaction
 
 
 ## 문제해결 및 전략
+Request를 VO에 담고, Validation 체크 후 승인프로세스로 넘어가 데이터베이스에 넣습니다.
+
 
 ## 빌드 및 실행 방법
+빌드 방법
+Project를 import하신 후 maven에서 Update Project합니다.
+maven build 통해 war 생성합니다.
 
-## API Spec
+
+
+## API Spec (JSON format)
 -**승인 요청 값**
 |파라미터|필드 설명 | 타입 | Size | 필수값 여부 | 비고
 |--|--|--|--|--|--|

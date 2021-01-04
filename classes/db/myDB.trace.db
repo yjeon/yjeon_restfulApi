@@ -1,0 +1,18 @@
+2021-01-04 16:03:40 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TRANSACTION" not found; SQL statement:
+INSERT INTO TRANSACTION VALUES (?,'1',?,?,?,'','N',?,?) [42102-200]
+2021-01-04 16:03:40 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TRANSACTION" not found; SQL statement:
+SELECT TRANFLAG, AMOUNT, TAX, INSTALLMENT, ORIGINTRANID, CANCELFLAG, CARDINFO FROM TRANSACTION WHERE ID = ? [42102-200]
+2021-01-04 16:03:41 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TRANSACTION" not found; SQL statement:
+SELECT TRANFLAG, AMOUNT, TAX, INSTALLMENT, ORIGINTRANID, CANCELFLAG, CARDINFO FROM TRANSACTION WHERE ID = ? [42102-200]
+2021-01-04 16:04:28 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TRANSACTION" not found; SQL statement:
+INSERT INTO TRANSACTION VALUES (?,'1',?,?,?,'','N',?,?) [42102-200]
+2021-01-04 16:04:28 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TRANSACTION" not found; SQL statement:
+SELECT TRANFLAG, AMOUNT, TAX, INSTALLMENT, ORIGINTRANID, CANCELFLAG, CARDINFO FROM TRANSACTION WHERE ID = ? [42102-200]
+2021-01-04 16:04:29 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TRANSACTION" not found; SQL statement:
+SELECT TRANFLAG, AMOUNT, TAX, INSTALLMENT, ORIGINTRANID, CANCELFLAG, CARDINFO FROM TRANSACTION WHERE ID = ? [42102-200]

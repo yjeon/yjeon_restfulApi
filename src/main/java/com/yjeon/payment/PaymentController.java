@@ -18,7 +18,7 @@ import com.yjeon.transaction.TransactionVO;
 @RestController
 public class PaymentController {
 	
-	@RequestMapping(value = "payment/reqApprove", method = RequestMethod.POST)
+	@RequestMapping(value = "/payment/reqApprove", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
 	public JSONObject reqApprove(@RequestBody TransactionVO tranVO) {
 		//init
@@ -50,7 +50,7 @@ public class PaymentController {
 	}
 	
 	
-	@RequestMapping(value = "payment/reqCancel", method = RequestMethod.POST)
+	@RequestMapping(value = "/payment/reqCancel", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
 	public JSONObject reqCancel(@RequestBody TransactionVO tranVO) {
 		//init
@@ -62,13 +62,15 @@ public class PaymentController {
 		CancelProc cp = new CancelProc();
 		jobj = cp.valCheck(tranVO, jobj);
 		
-		//Data exists check
-		try {
-			originTran = cp.dataCheck((String)jobj.get("transactionId"));
-		} catch (Exception e) {
-			e.printStackTrace();
-			jobj.put("ReplyCode", "9999");
-			jobj.put("ReplyMessage", "Data Error - dataCheck()");
+		if("0000".equals(jobj.get("ReplyCode"))) {
+			//Data exists check
+			try {
+				originTran = cp.dataCheck((String)jobj.get("transactionId"));
+			} catch (Exception e) {
+				e.printStackTrace();
+				rtnData.put("ReplyCode", "9999");
+				rtnData.put("ReplyMessage", "Data Error - dataCheck()");
+			}
 		}
 		
 		if("0000".equals(originTran.get("ReplyCode"))) {
@@ -84,19 +86,19 @@ public class PaymentController {
 				rtnData = cp.approveCancelProc(originTran, jobj);
 			} catch (Exception e) {
 				e.printStackTrace();
-				jobj.put("ReplyCode", "9999");
-				jobj.put("ReplyMessage", "Data Error - reqCancel()");
+				rtnData.put("ReplyCode", "9999");
+				rtnData.put("ReplyMessage", "Data Error - reqCancel()");
 			}
 			
 		} else {
-			rtnData.put("ReplyCode", originTran.get("ReplyCode"));
-			rtnData.put("ReplyMessage", originTran.get("ReplyMessage"));
+			rtnData.put("ReplyCode", jobj.get("ReplyCode"));
+			rtnData.put("ReplyMessage", jobj.get("ReplyMessage"));
 		}
 		
 		return rtnData;
 	}
 	
-	@RequestMapping(value = "payment/reqInquery", method = RequestMethod.POST)
+	@RequestMapping(value = "/payment/reqInquery", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
 	public JSONObject inqueryTransaction(@RequestBody TransactionVO tranVO) throws Exception {
 		JSONObject jobj = new JSONObject();

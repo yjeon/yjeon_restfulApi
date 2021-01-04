@@ -83,7 +83,7 @@ public class InqueryProc {
 				AES128Util aes = new AES128Util();
 				String decryptData = aes.decrypt(cardInfo);
 				String[] cardInfos = decryptData.split("\\|");
-				rtnData.put("ccno", cardInfos[0]);
+				rtnData.put("ccno", CommonUtil.maskingCardNum(cardInfos[0], 6, cardInfos[0].length()-3));
 				rtnData.put("exp", cardInfos[1]);
 				rtnData.put("cvc", cardInfos[2]);
 				rtnData.put("transactionId", tranId);

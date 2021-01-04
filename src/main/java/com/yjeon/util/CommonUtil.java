@@ -74,4 +74,21 @@ public class CommonUtil {
 		
 		return dateTime+key;
 	}
+	
+	//card masking process.
+	public static String maskingCardNum(String ccno, int start, int end) {
+		String rtnData = "";
+		
+		if(ccno == null) return rtnData;
+		if(ccno.length()<end) return ccno;
+		
+		for(int i =0; i<ccno.length(); i++) {
+			if(i>=start && i<end) {
+				rtnData+="*";
+			} else {
+				rtnData+=ccno.charAt(i);
+			}
+		}
+		return rtnData;
+	}
 }
